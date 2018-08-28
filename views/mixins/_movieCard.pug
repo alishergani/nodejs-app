@@ -1,0 +1,8 @@
+mixin movieCard(movie = {})
+  .movie
+    h2.title
+      #{movie.title}
+    .movie__content 
+      p= movie.description
+      p= movie.rating
+
