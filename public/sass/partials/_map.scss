@@ -2,6 +2,9 @@
   padding: 20px;
   background: white;
   box-shadow: $shad;
+  .autocomplete__input {
+  	margin-bottom: 1rem;
+  }
 }
 #map {
   height: 500px;

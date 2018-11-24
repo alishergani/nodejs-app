@@ -5,18 +5,38 @@ html {
 body {
   background: $purple;
   background:#efefef;
+  position: relative;
+  padding-top: 10px;
   &:before {
     content: '';
     display: block;
     background: $grad;
     height: 10px;
     width: 100%;
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 2;
+  }
+  &:after {
+    content: '';
+    display: block;
+    background: $grad;
+    height: 10px;
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    z-index: 2;
   }
 }
 
 .inner {
   max-width:900px;
-  margin: 10px auto;
+  margin: 0px auto;
+  padding-bottom: 2rem;
   @media all and (max-width: 900px) {
     padding: 2rem;
   }

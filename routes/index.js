@@ -3,12 +3,11 @@ const router = express.Router();
 
 const storeController = require('../controllers/storeController');
 const userController = require('../controllers/userController');
-const movieController = require('../controllers/movieController');
 const authController = require('../controllers/authController');
 
 const { catchErrors } = require('../handlers/errorHandlers');
 
-router.get('/', catchErrors(storeController.getStores));
+router.get('/', storeController.homePage);
 router.get('/stores', 
 	authController.isLoggedIn,
 	catchErrors(storeController.getStores)
@@ -28,6 +27,8 @@ router.post('/add/:id/',
   catchErrors(storeController.resize),
   catchErrors(storeController.updateStore)
 );
+
+router.post('/delete', catchErrors(storeController.deleteStore))
 
 router.get('/stores/:id/edit', catchErrors(storeController.editStore));
 router.get('/store/:slug', catchErrors(storeController.getStoreBySlug));
@@ -55,7 +56,10 @@ router.get('/account',
 router.post('/account', catchErrors(userController.updateAccount))
 router.post('/account/forgot', catchErrors(authController.forgot))
 
+router.get('/map', storeController.mapPage);
 
-router.get('/movies', movieController.getMovies)
+
+router.get('/api/search', catchErrors(storeController.searchStores))
+
 
 module.exports = router;

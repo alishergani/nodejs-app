@@ -11,6 +11,10 @@
   font-weight: 600;
   cursor: pointer;
   margin-top: 20px;
+  &.--red {
+    background: $red;
+    color: #fff;
+  }
 }
 
 .avatar {
@@ -23,7 +27,15 @@
 .card {
   background: white;
   padding: 5rem;
+  margin-bottom: 3rem;
   box-shadow: 0 1px 10px rgba(0,0,0,0.15);
+  .half_wrapper {
+    display: flex;
+    justify-content: space-between;
+  }
+  .half_input {
+    flex-basis: 49%;
+  }
 }
 
 pre.error {
@@ -31,4 +43,26 @@ pre.error {
   background: white;
   line-height: 3;
   white-space: pre-line;
+}
+
+
+.address_wrapper {
+  .address_dropdown {
+    p.item {
+      line-height: 1;
+      margin: 0;
+      padding: 10px;
+      color: #303030;
+      cursor: pointer;
+      border-left: 1px solid rgba(0,0,0, .2);
+      border-right: 1px solid rgba(0,0,0, .2);
+      &:last-child {
+        border-bottom: 1px solid rgba(0,0,0, .2);
+      }
+      &:hover {
+        background-color: rgba(0,0,0, .5);
+        color: #fff;
+      }
+    }
+  }
 }

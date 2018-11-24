@@ -1,5 +1,5 @@
 .tags {
-  margin: 0;
+  margin: 10px 0;
   padding: 0;
   list-style: none;
   display: flex;
@@ -52,5 +52,29 @@
     border-left: 3px solid rgba(0,0,0,0.1);
     margin-right: -1px; /* ugh */
     background-clip: padding-box;
+  }
+}
+
+
+.author{
+  display: flex;
+  align-items: center;
+  p {
+    line-height: 1;
+    margin: 0;
+    margin-right: 1rem;
+    font-weight: bold;
+  }
+  .author_name {
+    padding: 5px;
+    border: 1px dotted #444;
+    background: $yellow;
+    cursor: pointer;
+    border-radius: 3px;
+    transition: .2s;
+    &:hover {
+      background: $purple;
+      color: $yellow;
+    }
   }
 }

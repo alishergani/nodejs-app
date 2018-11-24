@@ -6,19 +6,6 @@ const jimp = require('jimp');
 const uuid = require('uuid');
 
 
-// NodeJS MIGRATION
-// const fs = require('fs');
-// const storesFile = JSON.parse(fs.readFileSync(__dirname + '/../data/stores.json', 'utf-8'));
-// const insertStore = ()=> {
-//   storesFile.forEach( (item, i) => {
-//     // console.log(item.name)
-//     new Store(storesFile[i]).save();
-//     console.log('saved!######################');
-//   })
-// }
-// insertStore();
-
-
 const multerOptions = {
   storage: multer.memoryStorage(),
   fileFilter(req, file, next) {
@@ -32,7 +19,9 @@ const multerOptions = {
 };
 
 exports.homePage = (req, res) => {
-  res.render('index');
+  res.render('index', {
+    title: 'Home'
+  });
 };
 
 exports.addStore = (req, res) => {
@@ -59,16 +48,19 @@ exports.resize = async (req, res, next) => {
 
 exports.createStore = async (req, res) => {
   req.body.author = req.user._id;
-  const store = await (new Store(req.body)).save();
+  const store = await ( 
+    new Store(req.body)
+  )
+  .save();
   req.flash('success', `Successfully Created ${store.name}. Care to leave a review?`);
   res.redirect(`/store/${store.slug}`);
 };
 
 exports.getStores = async (req, res) => {
   // 1. Query the database for a list of all stores
-  const stores = await Store.find();
+  const stores = await Store.find().sort({created: 'desc'})
   res.render('stores', { title: 'Stores', stores });
-  // res.json(storesFile[20])
+  // res.json(stores)
 };
 
 const confirmOwner = (store, user) => {
@@ -87,8 +79,22 @@ exports.editStore = async (req, res) => {
   // 2. confirm they are the owner of the store
   confirmOwner(store, req.user, res)
   // 3. Render out the edit form so the user can update their store
-  res.render('editStore', { title: `Edit ${store.name}`, store });
+  res.render('editStore', { title: `Edit: ${store.name}`, store });
 };
+
+exports.deleteStore = async (req, res) => {
+  const store = await Store.findOne({_id: req.body.id})
+  // res.json(req.body.name)
+  // return;
+  if (req.user.name === req.body.name) {
+    await store.remove()
+    req.flash('success', `Store ${store.name} is removed successfully`)
+    res.redirect('/stores')
+  } else {
+    req.flash('error', `White your correct name to delete store`)  
+    res.redirect(`/stores/${req.body.id}/edit`)
+  }
+}
 
 exports.updateStore = async (req, res) => {
   // set the location data to be a point
@@ -98,7 +104,10 @@ exports.updateStore = async (req, res) => {
     new: true, // return the new store instead of the old one
     runValidators: true
   }).exec();
-  req.flash('success', `Successfully updated <strong>${store.name}</strong>. <a href="/store/${store.slug}">View Store →</a>`);
+  req.flash('success', 
+    `Successfully updated <strong>${store.name}</strong>. 
+      <a href="/store/${store.slug}">View Store →</a>
+    `);
   res.redirect(`/stores/${store._id}/edit`);
   // Redriect them the store and tell them it worked
 };
@@ -116,14 +125,10 @@ exports.getStoreBySlug = async (req, res, next) => {
 
 exports.getStoresByTag = async (req, res) => {
   const tag = req.params.tag;
-  
   const tagQuery = tag || { $exists: true }
-
   const tagsPromise = Store.getTagsList();
   const storesPromise = Store.find({ tags: tagQuery});
-
   const [tags, stores] = await Promise.all([tagsPromise, storesPromise]);
-
   res.render('tags', {
     title: 'Tags',
     tags, 
@@ -131,3 +136,24 @@ exports.getStoresByTag = async (req, res) => {
     stores
   })
 };
+
+exports.searchStores = async (req, res) => {
+  const stores = await Store
+  .find({
+    $text: {
+      $search: req.query.q
+    }
+  }, {
+    score: { $meta: 'textScore' } 
+  })
+  .sort({
+    score: { $meta: 'textScore' }
+  })
+  .limit(5)
+
+  res.json(stores)
+}
+
+exports.mapPage = (req, res) => {
+  res.render('map', { title: 'Map' })
+}

@@ -1,7 +1,7 @@
 extends layout
 
 block content
-  // pre= h.dump(store)
+  // pre= h.dump(store.location.coordinates)
   .single
     .single__hero
       img.single__image(src=`/uploads/${store.photo || 'store.png'}`)
@@ -9,7 +9,7 @@ block content
         a(href=`/store/${store.slug}`) #{store.name}
   .single__details.inner
     img.single__map(src=h.staticMap(store.location.coordinates))
-    a(href=`https://www.google.com/maps/search/?api=1&query=${store.location.coordinates[1]},${store.location.coordinates[0]}` target="_blank").single__location= store.location.address
+    // a(href=`https://www.google.com/maps/search/?api=1&query=${store.location.coordinates[1]},${store.location.coordinates[0]}` target="_blank").single__location= store.location.address
     p= store.description
 
     if store.tags
@@ -18,4 +18,6 @@ block content
           li.tag
             a.tag__link(href=`/tags/${tag}`)
               span.tag__text  ##{tag}
-    span #{store.author.name}
+    .author
+      p Author:
+      strong.author_name #{store.author.name}

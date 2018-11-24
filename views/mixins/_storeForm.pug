@@ -11,11 +11,16 @@ mixin storeForm(store = {})
         img(src=`/uploads/${store.photo}`, alt=store.name width=200)
     //- address, lng and lat
     label(for="address") Address
-    input(type="text" id="address" name="location[address]" value=(store.location && store.location.address))
-    label(for="lng") Address Lng
-    input(type="text" id="lng" name="location[coordinates][0]" value=(store.location && store.location.coordinates[0]) required)
-    label(for="lat") Address Lat
-    input(type="text" id="lat" name="location[coordinates][1]" value=(store.location && store.location.coordinates[1]) required)
+    .address_wrapper
+      input(type="text" id="address" name="location[address]" value=(store.location && store.location.address))
+      .address_dropdown
+    .half_wrapper
+      .half_input
+        label(for="lng") Address Lng
+        input(type="text" id="lng" name="location[coordinates][0]" value=(store.location && store.location.coordinates[0]) required)
+      .half_input
+        label(for="lat") Address Lat
+        input(type="text" id="lat" name="location[coordinates][1]" value=(store.location && store.location.coordinates[1]) required)
     - const choices = ['Wifi', 'Open Late', 'Family Friendly', 'Vegatarian', 'Licensed']
     - const tags = store.tags || []
     ul.tags
@@ -24,3 +29,12 @@ mixin storeForm(store = {})
           input(type="checkbox" id=choice value=choice name="tags" checked=(tags.includes(choice)))
           label(for=choice) #{choice}
     input(type="submit" value="Save →" class="button")
+
+
+
+  form(action='/delete/' method="POST" class="card" )
+    input(type="hidden" name="id" value=store._id)
+    label(for="name") Enter Your Name To Delete
+    input(type="password" name="name")
+    input(type="submit" value="Delete →" class="button --red")
+

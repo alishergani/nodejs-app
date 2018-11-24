@@ -10,10 +10,11 @@
   }
 }
 
+
 .flash {
   background: white;
   box-shadow: 0 3px 10px rgba(0,0,0,0.15);
-  margin-bottom: 2rem;
+  margin: 2rem 0;
   padding: 2rem;
   position: relative;
   z-index: 1;
@@ -61,5 +62,12 @@
   }
   p {
     margin: 0;
+  }
+  &.fade-out {
+    transition: .5s;
+    opacity: 0;
+    visibility: hidden;
+    overflow: hidden;
+    display: none;
   }
 }
